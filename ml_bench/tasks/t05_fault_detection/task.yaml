@@ -1,0 +1,44 @@
+id: t05_fault_detection
+title: Fault Detection on a Two-Tank Sensor Stream
+tier: 1
+category: fault_detection
+difficulty: medium
+
+# Files visible to the model in the sandbox under /workspace/
+visible:
+  - data/train.npz
+  - prompt.md      # mounted as /workspace/README.md
+
+# Files visible only to the judge
+hidden:
+  - hidden/test_id.npz
+  - hidden/test_ood.npz
+  - hidden/judge_tests.py
+
+# Output the model must produce in /workspace/
+output:
+  path: solution.py
+  contract:
+    callable: predict
+    signature: "predict(X: np.ndarray) -> np.ndarray"
+    input_shape: [N, 64, 6]
+    input_dtype: float32
+    output_shape: [N]
+    output_range: [0.0, 1.0]
+
+# Pass thresholds (gating, multiplicative — failing any zeros the score)
+thresholds:
+  type_contract: true
+  determinism_atol: 1.0e-6
+  variance_probe_min_std: 0.05
+  in_distribution_f1: 0.85
+
+# Probes that are reported but do not gate the score
+report_only:
+  ood_f1: 0.70           # logged target; gap = id_f1 - ood_f1 is the headline metric
+
+# Resource limits applied by the sandbox
+limits:
+  wall_clock_s: 120
+  memory_mb: 4096
+  network: false

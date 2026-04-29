@@ -1,0 +1,53 @@
+id: t01_kalman_filter
+title: Kalman Filter for a 2D Constant-Velocity Tracker
+tier: 1
+category: state_estimation
+difficulty: medium
+
+# Files visible to the model in /workspace/
+visible:
+  - data/example.npz   # 4 example trajectories WITH ground truth (X_true)
+  - prompt.md          # mounted as /workspace/README.md
+
+# Files visible only to the judge
+hidden:
+  - hidden/test_id.npz
+  - hidden/test_ood.npz
+  - hidden/judge_tests.py
+
+# Output the model must produce in /workspace/
+output:
+  path: solution.py
+  contract:
+    callable: estimate
+    signature: "estimate(A, B, C, Q, R, U, Y, x0_mean, x0_cov) -> np.ndarray"
+    arg_shapes:
+      A: [n, n]
+      B: [n, m]
+      C: [p, n]
+      Q: [n, n]
+      R: [p, p]
+      U: [N, T, m]
+      Y: [N, T, p]
+      x0_mean: [n]
+      x0_cov: [n, n]
+    output_shape: [N, T, n]
+
+# Pass thresholds (gating, multiplicative — failing any zeros the score)
+thresholds:
+  type_contract: true
+  determinism_atol: 1.0e-6
+  variance_probe_min_std: 0.05
+  beats_persistence_ratio: 0.65    # id_rmse < 0.65 * persistence_rmse
+  absolute_rmse_bound: 0.55        # id_rmse <= 0.55
+
+# Probes that are reported but do not gate the score
+report_only:
+  ood_rmse: 0.85                   # informative target
+  generalization_gap: 0.30         # ood_rmse - id_rmse, headline metric
+
+# Resource limits applied by the sandbox
+limits:
+  wall_clock_s: 60
+  memory_mb: 4096
+  network: false

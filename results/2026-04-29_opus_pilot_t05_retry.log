@@ -1,0 +1,19 @@
+
+=== t05_fault_detection ===
+  sample 1/5 ...
+    score=0.995  metrics={'in_distribution_f1': 0.9950248756218906, 'out_of_distribution_f1': 0.7867867867867868, 'generalization_gap': 0.20823808883510375, 'id_f1_threshold': 0.85, 'passes_id_threshold': True}
+  sample 2/5 ...
+    score=0.995  metrics={'in_distribution_f1': 0.995, 'out_of_distribution_f1': 0.7607361963190185, 'generalization_gap': 0.23426380368098154, 'id_f1_threshold': 0.85, 'passes_id_threshold': True}
+  sample 3/5 ...
+    score=0.997  metrics={'in_distribution_f1': 0.9974937343358395, 'out_of_distribution_f1': 0.774390243902439, 'generalization_gap': 0.2231034904334005, 'id_f1_threshold': 0.85, 'passes_id_threshold': True}
+  sample 4/5 ...
+    score=0.998  metrics={'in_distribution_f1': 0.9975062344139651, 'out_of_distribution_f1': 0.8700564971751412, 'generalization_gap': 0.1274497372388239, 'id_f1_threshold': 0.85, 'passes_id_threshold': True}
+  sample 5/5 ...
+    score=0.998  metrics={'in_distribution_f1': 0.9975062344139651, 'out_of_distribution_f1': 0.774390243902439, 'generalization_gap': 0.22311599051152609, 'id_f1_threshold': 0.85, 'passes_id_threshold': True}
+
+task                             |   n |   mean |   best |          pass
+------------------------------------------------------------------------
+t05_fault_detection              |   5 |  0.997 |  0.998 |  100% (5/5)
+
+Target Opus pass band: 30-60%
+  t05_fault_detection               too easy (pass=100%) — tighten gates

@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.ipynb_checkpoints/
+.DS_Store
+
+# Generated artifacts
+ml_bench/tasks/*/data/*.npz
+ml_bench/tasks/*/hidden/*.npz
+runs/
+adapters/
+judge_cache/

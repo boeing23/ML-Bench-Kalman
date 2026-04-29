@@ -1,0 +1,46 @@
+id: t02_system_identification
+title: System Identification of a Linear State-Space Plant
+tier: 1
+category: system_identification
+difficulty: medium
+
+# Files visible to the model in the sandbox under /workspace/
+visible:
+  - data/train.npz
+  - prompt.md      # mounted as /workspace/README.md
+
+# Files visible only to the judge
+hidden:
+  - hidden/test_id.npz
+  - hidden/test_ood.npz
+  - hidden/judge_tests.py
+
+# Output the model must produce in /workspace/
+output:
+  path: solution.py
+  contract:
+    callable: fit_and_predict
+    signature: "fit_and_predict(U_train, Y_train, U_test, Y_test_warmup) -> np.ndarray"
+    input_shapes:
+      U_train: [N_tr, 80, 2]
+      Y_train: [N_tr, 80, 2]
+      U_test:  [N_te, 80, 2]
+      Y_test_warmup: [N_te, 10, 2]
+    output_shape: [N_te, 70, 2]
+
+# Pass thresholds (gating, multiplicative — failing any zeros the score)
+thresholds:
+  type_contract: true
+  determinism_atol: 1.0e-6
+  beats_persistence_ratio: 0.5      # id_rmse must be < 0.5 × persistence
+  in_distribution_rmse: 0.30        # gate
+
+# Probes that are reported but do not gate the score
+report_only:
+  out_of_distribution_rmse: 0.40   # logged target; gen gap = ood - id is the headline
+
+# Resource limits applied by the sandbox
+limits:
+  wall_clock_s: 120
+  memory_mb: 4096
+  network: false
