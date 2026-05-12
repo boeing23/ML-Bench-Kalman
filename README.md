@@ -206,11 +206,7 @@ What has been run end-to-end:
 
 What has **not** been run end-to-end:
 
-- **Multi-round QLoRA training loop** on Layer 1 — the Colab notebook is wired up, but
-  the full N-round generate → eval → format → train cycle has not been executed past
-  round 0. Training a Qwen2.5-7B QLoRA across rounds is GPU-time-heavy (Colab L4 ≥ 1 h
-  per round per task suite); we ship the loop as runnable code + design, not as a
-  trained-adapter artifact.
+
 - **Layer 2 composite reward** — `R_emp + R_inv + R_nov + R_cal` is specified and the
   AST-level process-reward probes are sketched, but the composite-reward training
   signal has not been folded into a live training run.
@@ -219,8 +215,4 @@ What has **not** been run end-to-end:
   recall measurably improving downstream training reward is **not** empirically
   demonstrated; it is a designed-and-implemented substrate, pending compute.
 
-Why this is fine for the submission: Layer 1 is the verifiable rung and runs locally
-in ~2 minutes; Layers 2–3 are the post-verifiable trajectory whose value is the
-*design*, not a trained checkpoint. The architecture is portable across research
-paradigms (see "Why this design" above) regardless of whether any single training
-run has converged.
+
