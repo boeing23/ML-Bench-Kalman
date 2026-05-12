@@ -191,3 +191,36 @@ results/      pilot writeups + logs
 
 Reward-denial test: cosmetic rewrites of the reference (renames, refactors, same algorithm)
 produce identical score within 1e-6.
+
+---
+
+## Status & caveats
+
+What has been run end-to-end:
+
+- **Layer 1 (RLVR core)** — deterministic judge, sandbox harness, t01/t02/t05 tasks,
+  Opus rubric judge, SFT formatter, ChatML pipeline. Pilot completed 2026-04-29 (see
+  `results/`); `runs/round_0/` contains the rejection-sampling SFT pool generated from
+  the pilot. Reference solutions score as documented (t01 ≈ 0.588, t02 ≈ 0.890,
+  t05 = 1.000).
+
+What has **not** been run end-to-end:
+
+- **Multi-round QLoRA training loop** on Layer 1 — the Colab notebook is wired up, but
+  the full N-round generate → eval → format → train cycle has not been executed past
+  round 0. Training a Qwen2.5-7B QLoRA across rounds is GPU-time-heavy (Colab L4 ≥ 1 h
+  per round per task suite); we ship the loop as runnable code + design, not as a
+  trained-adapter artifact.
+- **Layer 2 composite reward** — `R_emp + R_inv + R_nov + R_cal` is specified and the
+  AST-level process-reward probes are sketched, but the composite-reward training
+  signal has not been folded into a live training run.
+- **Layer 3 MCP shared memory** — schema, API, agent/judge call patterns, and committee
+  review flow are designed in the sister package `pm_env_layered/`. Cross-episode
+  recall measurably improving downstream training reward is **not** empirically
+  demonstrated; it is a designed-and-implemented substrate, pending compute.
+
+Why this is fine for the submission: Layer 1 is the verifiable rung and runs locally
+in ~2 minutes; Layers 2–3 are the post-verifiable trajectory whose value is the
+*design*, not a trained checkpoint. The architecture is portable across research
+paradigms (see "Why this design" above) regardless of whether any single training
+run has converged.
